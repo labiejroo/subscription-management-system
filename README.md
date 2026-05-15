@@ -30,6 +30,8 @@ Live demo: **[transactions-dashboard.vercel.app](https://transactions-dashboard.
 | Notifications | react-toastify | `toast.promise()` for invoice flow |
 | Virtualization | react-virtuoso | Performant rendering of long lists |
 | Testing | Playwright | E2E coverage of critical user flows |
+| Formatting | Prettier | Consistent code style, format-on-save in VS Code |
+| Git hooks | Husky | Enforced commit message convention |
 | CI/CD | GitHub Actions | Type check + lint + build on every push |
 | Deployment | Vercel | Native Next.js support, preview URLs per PR |
 
@@ -102,12 +104,36 @@ src/
     types.ts                        # shared TypeScript types
     utils.ts                        # cn(), fmtUSD()
     logger.ts                       # observability abstraction
+    eng.ts                          # all user-facing copy strings
 
 hooks/
   useTransactions.ts
   useRetryPayments.ts
   useDownloadInvoice.ts
 ```
+
+---
+
+## Development
+
+### Commit convention
+
+Enforced by Husky. Format: `<type>: <Capital letter message ending with period.>`
+
+Allowed types: `feature` | `bug` | `docs` | `style` | `refactor` | `test` | `chore` | `perf` | `ci` | `revert`
+
+```bash
+git commit -m "feature: Add invoice download button."   # ✅
+git commit -m "bug: Fix retry count not decrementing."  # ✅
+```
+
+### Code formatting
+
+Prettier is configured in `.prettierrc`. Install the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) — format-on-save is enabled automatically via `.vscode/settings.json`.
+
+### Copy strings
+
+All user-facing text is centralized in `src/lib/eng.ts`. Never hardcode strings directly in components — import from `eng.ts` instead.
 
 ---
 

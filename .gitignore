@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# production build
+dist/
+dist-ssr/
+
+# TypeScript
+*.tsbuildinfo
+
+# environment variables
+.env
+.env*.local
+*.local
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
+
+# Playwright
+test-results/
+playwright-report/
+
+# logs
+*.log
+npm-debug.log*

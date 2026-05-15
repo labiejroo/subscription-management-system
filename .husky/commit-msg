@@ -1,0 +1,18 @@
+#!/bin/sh
+commit_msg=$(cat "$1")
+pattern='^(feature|bug|docs|style|refactor|test|chore|perf|ci|revert): [A-Z].+\.$'
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo ""
+  echo "  Invalid commit message format."
+  echo ""
+  echo "  Required format:  <type>: <Message starting with capital letter, ending with period.>"
+  echo "  Allowed types:    feature | bug | docs | style | refactor | test | chore | perf | ci | revert"
+  echo ""
+  echo "  Examples:"
+  echo "    feature: Add invoice download button."
+  echo "    bug: Fix retry count not decrementing."
+  echo "    refactor: Extract copy strings to eng.ts."
+  echo ""
+  exit 1
+fi
