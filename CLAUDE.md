@@ -109,6 +109,17 @@ className={cn('base', condition && 'conditional', selected ? 'a' : 'b')}
 - **Component-local props** (`DataRowProps`, `ToolbarProps` etc.) → define inline in the component file
 - **Shared / domain types** (`TransactionStatus`, `TransactionRow`, `InvoiceState`) → `src/lib/types.ts`
 
+### Interface prop ordering
+Regular props alphabetically first, then function/callback props alphabetically at the bottom:
+```ts
+interface ExampleProps {
+  label: string;      // regular props — alphabetical
+  selected: boolean;
+  onChange: () => void;  // callbacks — alphabetical, always last
+  onToggle: (v: boolean) => void;
+}
+```
+
 ---
 
 ## TypeScript types

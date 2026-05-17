@@ -7,8 +7,8 @@ import { copy } from '@/lib/eng';
 import type { InvoiceStatus } from '@/lib/types';
 
 interface InvoiceResult {
-  id: string;
   blob: Blob;
+  id: string;
 }
 
 const fetchInvoice = async (id: string): Promise<InvoiceResult> => {

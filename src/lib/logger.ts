@@ -1,10 +1,10 @@
 type LogLevel = 'info' | 'warn' | 'error';
 
 interface LogEvent {
+  data?: Record<string, unknown>;
   event: string;
   level: LogLevel;
   timestamp: string;
-  data?: Record<string, unknown>;
 }
 
 const log = (level: LogLevel, event: string, data?: Record<string, unknown>): void => {

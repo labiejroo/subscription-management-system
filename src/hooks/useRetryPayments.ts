@@ -5,9 +5,9 @@ import { logger } from '@/lib/logger';
 import type { Transaction, RetryStatus } from '@/lib/types';
 
 interface RetryResult {
+  error?: string;
   id: string;
   status: 'completed' | 'failed';
-  error?: string;
 }
 
 interface MutationContext {

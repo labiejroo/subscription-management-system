@@ -131,10 +131,6 @@ git commit -m "bug: Fix retry count not decrementing."  # ✅
 
 Prettier is configured in `.prettierrc`. Install the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) — format-on-save is enabled automatically via `.vscode/settings.json`.
 
-### Copy strings
-
-All user-facing text is centralized in `src/lib/eng.ts`. Never hardcode strings directly in components — import from `eng.ts` instead.
-
 ---
 
 ## Architecture decisions

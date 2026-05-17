@@ -19,12 +19,12 @@ const deltaVariants = cva(
 type DeltaTone = NonNullable<VariantProps<typeof deltaVariants>['tone']>;
 
 interface StatCardProps {
-  label: string;
-  value: string;
-  sub: string;
   delta?: string;
   deltaTone?: DeltaTone;
   icon: React.ReactNode;
+  label: string;
+  sub: string;
+  value: string;
 }
 
 export const StatCard = ({

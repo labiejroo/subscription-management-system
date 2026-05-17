@@ -10,8 +10,8 @@ import { copy, fmt } from '../../../../lib/eng';
 export interface DataRowProps {
   row: TransactionRow;
   selected: boolean;
-  onToggle: (checked: boolean) => void;
   onDownload?: () => void;
+  onToggle: (checked: boolean) => void;
 }
 
 export const DataRowCells = ({ row, selected, onToggle, onDownload }: DataRowProps) => {

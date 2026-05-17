@@ -10,8 +10,8 @@ import { fmt } from '../../../../lib/eng';
 export interface MobileRowProps {
   row: TransactionRow;
   selected: boolean;
-  onToggle: (checked: boolean) => void;
   onDownload?: () => void;
+  onToggle: (checked: boolean) => void;
 }
 
 export const MobileRowContent = ({ row, selected, onToggle, onDownload }: MobileRowProps) => {

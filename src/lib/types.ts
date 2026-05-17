@@ -14,14 +14,14 @@ export interface PaymentMethod {
 }
 
 export interface Transaction {
-  id: string;
-  date: string;
-  description: string;
   amount: number;
   currency: string;
+  date: string;
+  description: string;
+  id: string;
+  invoice: InvoiceState;
   paymentMethod: PaymentMethod;
   status: TransactionStatus;
-  invoice: InvoiceState;
 }
 
 export interface TransactionRow extends Transaction {

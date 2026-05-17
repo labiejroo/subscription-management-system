@@ -5,10 +5,10 @@ import { useEffect, useRef } from 'react';
 import { IconCheck } from '../icons';
 
 interface CheckboxProps {
-  checked: boolean;
-  onChange?: (checked: boolean) => void;
-  indeterminate?: boolean;
   ariaLabel?: string;
+  checked: boolean;
+  indeterminate?: boolean;
+  onChange?: (checked: boolean) => void;
 }
 
 export const Checkbox = ({

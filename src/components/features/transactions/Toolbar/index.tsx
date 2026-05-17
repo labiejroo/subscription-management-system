@@ -9,11 +9,11 @@ type FilterValue = TransactionStatus | 'all';
 
 interface ToolbarProps {
   query: string;
-  setQuery: (q: string) => void;
-  status: FilterValue;
-  setStatus: (s: FilterValue) => void;
   selectedCount: number;
+  status: FilterValue;
   onRetry: () => void;
+  setQuery: (q: string) => void;
+  setStatus: (s: FilterValue) => void;
 }
 
 export const Toolbar = ({

@@ -10,8 +10,8 @@ import { copy } from '../../../../lib/eng';
 type FilterValue = TransactionStatus | 'all';
 
 interface FilterOption {
-  v: FilterValue;
   label: string;
+  v: FilterValue;
 }
 
 interface StatusFilterProps {

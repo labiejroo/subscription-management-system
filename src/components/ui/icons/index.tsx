@@ -1,8 +1,8 @@
 interface IconProps {
+  className?: string;
   d: React.ReactNode;
   size?: number;
   stroke?: number;
-  className?: string;
 }
 
 type SvgIconProps = Omit<IconProps, 'd'>;

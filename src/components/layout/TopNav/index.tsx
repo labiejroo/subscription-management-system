@@ -2,9 +2,9 @@ import { cn } from '../../../lib/utils';
 import { copy } from '../../../lib/eng';
 
 interface NavLinkProps {
-  href: string;
   active?: boolean;
   children: React.ReactNode;
+  href: string;
 }
 
 const NavLink = ({ href, active, children }: NavLinkProps) => (
