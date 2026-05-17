@@ -25,6 +25,9 @@ import type { TransactionRow, TransactionStatus } from '../src/lib/types';
 
 type FilterValue = TransactionStatus | 'all';
 
+const TABLE_ROW_HEIGHT = 61;
+const TABLE_HEADER_HEIGHT = 40;
+
 const VirtuosoList = forwardRef<HTMLDivElement>((props, ref) => (
   <ul ref={ref as React.Ref<HTMLUListElement>} {...props} />
 ));
@@ -182,7 +185,8 @@ export default function Page() {
               </table>
             ) : (
               <TableVirtuoso
-                style={{ height: pageRows.length * 57 }}
+                style={{ height: pageRows.length * TABLE_ROW_HEIGHT + TABLE_HEADER_HEIGHT }}
+                overscan={300}
                 data={pageRows}
                 fixedHeaderContent={() => (
                   <tr className="border-b border-ink-200 bg-ink-50/60 text-left text-[11px] font-medium uppercase tracking-wider text-ink-500">

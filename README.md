@@ -157,6 +157,19 @@ Retry mutations use `onMutate` to optimistically update row state, with `onError
 
 `lib/logger.ts` is a thin abstraction over `console` that emits structured JSON log events. In production, replace the single `console.info/error` call with `mixpanel.track()`, a CloudWatch `PutLogEvents` call, or any structured logging SDK — no changes required elsewhere in the codebase.
 
+### E2E-only test strategy
+
+Unit tests were deliberately skipped in favour of Playwright E2E tests that cover the same surface area at a higher confidence level.
+
+The critical behaviours in this app — retry flow, invoice download state, checkbox selection, toast notifications — are all the result of several moving parts working together: React Query mutations, optimistic updates, route handlers, and component state. A unit test would have to mock React Query, the fetch layer, and the router, which means the test ends up verifying the mock wiring rather than the actual behaviour.
+
+Playwright hits a real Next.js dev server with real network requests, so a passing test means the full stack actually works.
+
+**If unit tests were added**, the right tool would be [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) (RTL) with Vitest:
+- **Hooks** (`useRetryPayments`, `useDownloadInvoice`) — wrap in `renderHook` with a `QueryClientProvider`, stub `fetch` with `vi.spyOn`, assert on returned state transitions
+- **Pure components** (`StatusBadge`, `Checkbox`, `StatCard`) — render with RTL, assert on accessible roles and text
+- **MSW** (Mock Service Worker) instead of `vi.spyOn` for more realistic fetch interception without touching implementation details
+
 ### react-virtuoso over react-virtualized
 
 `react-virtualized` has not had a major release in years and has limited TypeScript support. `react-virtuoso` is actively maintained, has a smaller API surface, and integrates cleanly with React 18 concurrent features.

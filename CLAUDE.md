@@ -246,6 +246,19 @@ Target Lighthouse score 90+ on all metrics:
 - Use `loading.tsx` and `Suspense` boundaries
 - Use skeleton loaders (not spinners) for initial page load
 
+### react-virtuoso — wysokość kontenera i overscan
+
+`TableVirtuoso` renderuje tylko wiersze widoczne w obszarze scroll kontenera.
+
+Wzór na `style.height`:
+```
+pageRows.length * TABLE_ROW_HEIGHT + TABLE_HEADER_HEIGHT
+```
+- `TABLE_ROW_HEIGHT = 61` — `py-3` (24 px) + dwuliniowy opis (~36 px) + border (1 px)
+- `TABLE_HEADER_HEIGHT = 40` — stały nagłówek (`fixedHeaderContent`) zabiera miejsce z kontenera
+
+`overscan={300}` — pre-renderuje wiersze 300 px poza widocznym obszarem. Bez tego Playwright widzi tylko te wiersze, które fizycznie zmieściły się na ekranie (domyślny overscan react-virtuoso = 5 px), co powoduje fałszywe błędy `toHaveCount`.
+
 ---
 
 ## Accessibility
