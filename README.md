@@ -4,7 +4,7 @@ A subscription transactions dashboard.
 
 Live demo: **[subscription-management-system-ruby.vercel.app](https://subscription-management-system-ruby.vercel.app)**
 
-![Dashboard screenshot](design-reference.png)
+![Dashboard screenshot](.github/screenshot.png)
 
 ---
 
