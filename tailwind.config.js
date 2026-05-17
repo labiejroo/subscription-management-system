@@ -36,6 +36,9 @@ module.exports = {
       spacing: {
         4.5: '1.125rem', // 18px — checkbox & spinner icon containers
       },
+      screens: {
+        tbl: '910px',
+      },
     },
   },
   plugins: [],

@@ -25,9 +25,6 @@ import type { TransactionRow, TransactionStatus } from '../src/lib/types';
 
 type FilterValue = TransactionStatus | 'all';
 
-const TABLE_ROW_HEIGHT = 61;
-const TABLE_HEADER_HEIGHT = 40;
-
 const VirtuosoList = forwardRef<HTMLDivElement>((props, ref) => (
   <ul ref={ref as React.Ref<HTMLUListElement>} {...props} />
 ));
@@ -164,7 +161,7 @@ export default function Page() {
             onRetry={onRetry}
           />
 
-          <div className="hidden md:block x-scroll overflow-x-auto">
+          <div className="hidden tbl:block x-scroll overflow-x-auto">
             {isLoading ? (
               <table className="w-full min-w-table table-fixed">
                 <tbody>
@@ -185,18 +182,18 @@ export default function Page() {
               </table>
             ) : (
               <TableVirtuoso
-                style={{ height: pageRows.length * TABLE_ROW_HEIGHT + TABLE_HEADER_HEIGHT }}
+                useWindowScroll
                 overscan={300}
                 data={pageRows}
                 fixedHeaderContent={() => (
-                  <tr className="border-b border-ink-200 bg-ink-50/60 text-left text-[11px] font-medium uppercase tracking-wider text-ink-500">
-                    <th className="px-4 py-2.5"></th>
-                    <th className="px-4 py-2.5">{copy.colTransaction}</th>
-                    <th className="px-4 py-2.5">{copy.colDateTime}</th>
+                  <tr className="border-b border-ink-200 text-left text-[11px] font-medium uppercase tracking-wider text-ink-500" style={{ backgroundColor: '#fafaf9' }}>
+                    <th className="w-10 px-4 py-2.5"></th>
+                    <th className="w-36 px-4 py-2.5">{copy.colTransaction}</th>
+                    <th className="w-44 px-4 py-2.5">{copy.colDateTime}</th>
                     <th className="px-4 py-2.5">{copy.colDescription}</th>
-                    <th className="px-4 py-2.5 text-right">{copy.colAmount}</th>
-                    <th className="px-4 py-2.5">{copy.colStatus}</th>
-                    <th className="px-4 py-2.5 text-right">{copy.colInvoice}</th>
+                    <th className="w-24 px-4 py-2.5 text-right">{copy.colAmount}</th>
+                    <th className="w-28 px-4 py-2.5">{copy.colStatus}</th>
+                    <th className="w-32 px-4 py-2.5 text-right">{copy.colInvoice}</th>
                   </tr>
                 )}
                 components={{
@@ -229,7 +226,7 @@ export default function Page() {
             )}
           </div>
 
-          <div className="md:hidden">
+          <div className="tbl:hidden">
             {isLoading ? (
               <ul>
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -240,7 +237,7 @@ export default function Page() {
               <p className="px-4 py-16 text-center text-sm text-ink-500">{copy.emptyFilters}</p>
             ) : (
               <Virtuoso
-                style={{ height: pageRows.length * 120 }}
+                useWindowScroll
                 data={pageRows}
                 components={{
                   List: VirtuosoList,
