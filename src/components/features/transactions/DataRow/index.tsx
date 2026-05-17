@@ -7,30 +7,28 @@ import { InvoiceButton } from '../InvoiceButton';
 import type { TransactionRow } from '../../../../lib/types';
 import { copy, fmt } from '../../../../lib/eng';
 
-interface DataRowProps {
+export interface DataRowProps {
   row: TransactionRow;
   selected: boolean;
   onToggle: (checked: boolean) => void;
   onDownload?: () => void;
 }
 
-export const DataRow = ({ row, selected, onToggle, onDownload }: DataRowProps) => {
+export const DataRowCells = ({ row, selected, onToggle, onDownload }: DataRowProps) => {
   const isFailed = row.status === 'failed';
   const isRetrying = row.status === 'retrying';
 
   return (
-    <tr
-      className={cn(
-        'border-b border-ink-200 last:border-0 transition-colors',
-        selected ? 'row-selected' : 'hover:bg-ink-50/60'
-      )}
-    >
+    <>
       <td className="w-10 px-4 py-3">
         {isFailed && (
           <Checkbox checked={selected} onChange={onToggle} ariaLabel={fmt.selectForRetry(row.id)} />
         )}
         {isRetrying && (
-          <span className="grid h-4.5 w-4.5 place-items-center" aria-label={copy.retryingAriaLabel}>
+          <span
+            className="grid h-4.5 w-4.5 place-items-center"
+            aria-label={copy.retryingAriaLabel}
+          >
             <span className="h-3.5 w-3.5 rounded-full border-2 border-sky-200 border-t-sky-500 spin" />
           </span>
         )}
@@ -58,8 +56,19 @@ export const DataRow = ({ row, selected, onToggle, onDownload }: DataRowProps) =
       <td className="px-4 py-3 text-right">
         <InvoiceButton state={row.invoice} onDownload={onDownload} />
       </td>
-    </tr>
+    </>
   );
 };
+
+export const DataRow = (props: DataRowProps) => (
+  <tr
+    className={cn(
+      'border-b border-ink-200 last:border-0 transition-colors',
+      props.selected ? 'row-selected' : 'hover:bg-ink-50/60'
+    )}
+  >
+    <DataRowCells {...props} />
+  </tr>
+);
 
 export default DataRow;

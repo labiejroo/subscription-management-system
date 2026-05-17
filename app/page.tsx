@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, forwardRef } from 'react';
+import type React from 'react';
+import { TableVirtuoso, Virtuoso } from 'react-virtuoso';
 
-import { fmtUSD, fmtPaymentMethod } from '../src/lib/utils';
+import { fmtUSD, fmtPaymentMethod, cn } from '../src/lib/utils';
 import { useTransactions } from '../src/hooks/useTransactions';
 import { useDownloadInvoice } from '../src/hooks/useDownloadInvoice';
 import { copy } from '../src/lib/eng';
@@ -13,8 +15,8 @@ import { Toast } from '../src/components/ui/Toast';
 import { IconCardCoin, IconWallet, IconAlert, IconClock } from '../src/components/ui/icons';
 import { StatCard } from '../src/components/features/transactions/StatCard';
 import { Toolbar } from '../src/components/features/transactions/Toolbar';
-import { DataRow } from '../src/components/features/transactions/DataRow';
-import { MobileRow } from '../src/components/features/transactions/MobileRow';
+import { DataRowCells } from '../src/components/features/transactions/DataRow';
+import { MobileRowContent } from '../src/components/features/transactions/MobileRow';
 import {
   DesktopRowSkeleton,
   MobileRowSkeleton,
@@ -22,6 +24,11 @@ import {
 import type { TransactionRow, TransactionStatus } from '../src/lib/types';
 
 type FilterValue = TransactionStatus | 'all';
+
+const VirtuosoList = forwardRef<HTMLDivElement>((props, ref) => (
+  <ul ref={ref as React.Ref<HTMLUListElement>} {...props} />
+));
+VirtuosoList.displayName = 'VirtuosoList';
 
 export default function Page() {
   const { data, isLoading } = useTransactions();
@@ -154,19 +161,30 @@ export default function Page() {
             onRetry={onRetry}
           />
 
-          <div className="hidden md:block">
-            <div className="x-scroll overflow-x-auto">
+          <div className="hidden md:block x-scroll overflow-x-auto">
+            {isLoading ? (
               <table className="w-full min-w-table table-fixed">
-                <colgroup>
-                  <col style={{ width: '44px' }} />
-                  <col style={{ width: '150px' }} />
-                  <col style={{ width: '170px' }} />
-                  <col />
-                  <col style={{ width: '110px' }} />
-                  <col style={{ width: '130px' }} />
-                  <col style={{ width: '140px' }} />
-                </colgroup>
-                <thead>
+                <tbody>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <DesktopRowSkeleton key={i} />
+                  ))}
+                </tbody>
+              </table>
+            ) : pageRows.length === 0 ? (
+              <table className="w-full min-w-table table-fixed">
+                <tbody>
+                  <tr>
+                    <td colSpan={7} className="px-4 py-16 text-center text-sm text-ink-500">
+                      {copy.emptyFilters}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <TableVirtuoso
+                style={{ height: pageRows.length * 57 }}
+                data={pageRows}
+                fixedHeaderContent={() => (
                   <tr className="border-b border-ink-200 bg-ink-50/60 text-left text-[11px] font-medium uppercase tracking-wider text-ink-500">
                     <th className="px-4 py-2.5"></th>
                     <th className="px-4 py-2.5">{copy.colTransaction}</th>
@@ -176,49 +194,65 @@ export default function Page() {
                     <th className="px-4 py-2.5">{copy.colStatus}</th>
                     <th className="px-4 py-2.5 text-right">{copy.colInvoice}</th>
                   </tr>
-                </thead>
-                <tbody aria-busy={isLoading}>
-                  {isLoading ? (
-                    Array.from({ length: 8 }).map((_, i) => <DesktopRowSkeleton key={i} />)
-                  ) : pageRows.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="px-4 py-16 text-center text-sm text-ink-500">
-                        {copy.emptyFilters}
-                      </td>
-                    </tr>
-                  ) : (
-                    pageRows.map((r) => (
-                      <DataRow
-                        key={r.id}
-                        row={{ ...r, invoice: invoiceState(r.id, r.invoice) }}
-                        selected={r._sel}
-                        onToggle={toggleRow(r.id)}
-                        onDownload={() => download(r.id)}
-                      />
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                )}
+                components={{
+                  Table: ({ style, ...props }) => (
+                    <table
+                      className="w-full min-w-table table-fixed"
+                      style={style}
+                      {...props}
+                    />
+                  ),
+                  TableRow: ({ item, ...props }) => (
+                    <tr
+                      {...props}
+                      className={cn(
+                        'border-b border-ink-200 last:border-0 transition-colors',
+                        item._sel ? 'row-selected' : 'hover:bg-ink-50/60'
+                      )}
+                    />
+                  ),
+                }}
+                itemContent={(_, r) => (
+                  <DataRowCells
+                    row={{ ...r, invoice: invoiceState(r.id, r.invoice) }}
+                    selected={r._sel}
+                    onToggle={toggleRow(r.id)}
+                    onDownload={() => download(r.id)}
+                  />
+                )}
+              />
+            )}
           </div>
 
-          <ul className="md:hidden">
+          <div className="md:hidden">
             {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => <MobileRowSkeleton key={i} />)
+              <ul>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <MobileRowSkeleton key={i} />
+                ))}
+              </ul>
             ) : pageRows.length === 0 ? (
-              <li className="px-4 py-16 text-center text-sm text-ink-500">{copy.emptyFilters}</li>
+              <p className="px-4 py-16 text-center text-sm text-ink-500">{copy.emptyFilters}</p>
             ) : (
-              pageRows.map((r) => (
-                <MobileRow
-                  key={r.id}
-                  row={{ ...r, invoice: invoiceState(r.id, r.invoice) }}
-                  selected={r._sel}
-                  onToggle={toggleRow(r.id)}
-                  onDownload={() => download(r.id)}
-                />
-              ))
+              <Virtuoso
+                style={{ height: pageRows.length * 120 }}
+                data={pageRows}
+                components={{
+                  List: VirtuosoList,
+                  Item: ({ children, ...props }) => <li {...props}>{children}</li>,
+                }}
+                itemContent={(_, r) => (
+                  <MobileRowContent
+                    row={{ ...r, invoice: invoiceState(r.id, r.invoice) }}
+                    selected={r._sel}
+                    onToggle={toggleRow(r.id)}
+                    onDownload={() => download(r.id)}
+                  />
+                )}
+              />
             )}
-          </ul>
+          </div>
 
           <Pagination
             page={page}

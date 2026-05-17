@@ -7,19 +7,19 @@ import { InvoiceButton } from '../InvoiceButton';
 import type { TransactionRow } from '../../../../lib/types';
 import { fmt } from '../../../../lib/eng';
 
-interface MobileRowProps {
+export interface MobileRowProps {
   row: TransactionRow;
   selected: boolean;
   onToggle: (checked: boolean) => void;
   onDownload?: () => void;
 }
 
-export const MobileRow = ({ row, selected, onToggle, onDownload }: MobileRowProps) => {
+export const MobileRowContent = ({ row, selected, onToggle, onDownload }: MobileRowProps) => {
   const isFailed = row.status === 'failed';
   const isRetrying = row.status === 'retrying';
 
   return (
-    <li className={cn('border-b border-ink-200 p-4', selected && 'row-selected')}>
+    <div className={cn('border-b border-ink-200 p-4', selected && 'row-selected')}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
@@ -55,8 +55,14 @@ export const MobileRow = ({ row, selected, onToggle, onDownload }: MobileRowProp
       <div className="mt-3 flex justify-end">
         <InvoiceButton state={row.invoice} onDownload={onDownload} />
       </div>
-    </li>
+    </div>
   );
 };
+
+export const MobileRow = (props: MobileRowProps) => (
+  <li>
+    <MobileRowContent {...props} />
+  </li>
+);
 
 export default MobileRow;
