@@ -1,3 +1,5 @@
+'use client';
+
 import { IconSearch, IconRefresh } from '../../../ui/icons';
 import { StatusFilter } from '../StatusFilter';
 import type { TransactionStatus } from '../../../../lib/types';

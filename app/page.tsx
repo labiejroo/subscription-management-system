@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { mockTransactions } from '../src/lib/mockData';
 import { fmtUSD, fmtPaymentMethod } from '../src/lib/utils';
+import { useTransactions } from '../src/hooks/useTransactions';
 import { useDownloadInvoice } from '../src/hooks/useDownloadInvoice';
 import { copy } from '../src/lib/eng';
 import type { InvoiceState } from '../src/lib/types';
@@ -15,20 +15,27 @@ import { StatCard } from '../src/components/features/transactions/StatCard';
 import { Toolbar } from '../src/components/features/transactions/Toolbar';
 import { DataRow } from '../src/components/features/transactions/DataRow';
 import { MobileRow } from '../src/components/features/transactions/MobileRow';
+import {
+  DesktopRowSkeleton,
+  MobileRowSkeleton,
+} from '../src/components/features/transactions/TableSkeleton';
 import type { TransactionRow, TransactionStatus } from '../src/lib/types';
 
 type FilterValue = TransactionStatus | 'all';
 
 export default function Page() {
-  const [rows, setRows] = useState<TransactionRow[]>(() =>
-    mockTransactions.map((r) => ({ ...r, _sel: false }))
-  );
+  const { data, isLoading } = useTransactions();
+  const [rows, setRows] = useState<TransactionRow[]>([]);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<FilterValue>('all');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [toast, setToast] = useState<{ count: number } | null>(null);
   const { download, rowStatus: invoiceRowStatus } = useDownloadInvoice();
+
+  useEffect(() => {
+    if (data) setRows(data.map((r) => ({ ...r, _sel: false })));
+  }, [data]);
 
   const invoiceState = (id: string, original: InvoiceState): InvoiceState =>
     invoiceRowStatus.get(id) === 'generating' ? 'generating' : original;
@@ -107,7 +114,7 @@ export default function Page() {
         <section className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label={copy.statTotalTransactions}
-            value={stats.total.toLocaleString()}
+            value={isLoading ? '—' : stats.total.toLocaleString()}
             sub={copy.statTotalTransactionsSub}
             delta={copy.statTotalTransactionsDelta}
             deltaTone="up"
@@ -115,7 +122,7 @@ export default function Page() {
           />
           <StatCard
             label={copy.statTotalPaid}
-            value={fmtUSD(stats.paid)}
+            value={isLoading ? '—' : fmtUSD(stats.paid)}
             sub={copy.statTotalPaidSub}
             delta={copy.statTotalPaidDelta}
             deltaTone="up"
@@ -123,7 +130,7 @@ export default function Page() {
           />
           <StatCard
             label={copy.statFailedPayments}
-            value={stats.failed.toLocaleString()}
+            value={isLoading ? '—' : stats.failed.toLocaleString()}
             sub={copy.statFailedPaymentsSub}
             delta={copy.statFailedPaymentsDelta}
             deltaTone="down"
@@ -131,8 +138,8 @@ export default function Page() {
           />
           <StatCard
             label={copy.statLastPayment}
-            value={stats.last ? fmtUSD(stats.last.amount) : '—'}
-            sub={stats.last ? stats.last.date : copy.statNoRecentPayments}
+            value={isLoading ? '—' : stats.last ? fmtUSD(stats.last.amount) : '—'}
+            sub={isLoading ? '—' : stats.last ? stats.last.date : copy.statNoRecentPayments}
             icon={<IconClock size={14} />}
           />
         </section>
@@ -170,8 +177,10 @@ export default function Page() {
                     <th className="px-4 py-2.5 text-right">{copy.colInvoice}</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {pageRows.length === 0 ? (
+                <tbody aria-busy={isLoading}>
+                  {isLoading ? (
+                    Array.from({ length: 8 }).map((_, i) => <DesktopRowSkeleton key={i} />)
+                  ) : pageRows.length === 0 ? (
                     <tr>
                       <td colSpan={7} className="px-4 py-16 text-center text-sm text-ink-500">
                         {copy.emptyFilters}
@@ -194,7 +203,9 @@ export default function Page() {
           </div>
 
           <ul className="md:hidden">
-            {pageRows.length === 0 ? (
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => <MobileRowSkeleton key={i} />)
+            ) : pageRows.length === 0 ? (
               <li className="px-4 py-16 text-center text-sm text-ink-500">{copy.emptyFilters}</li>
             ) : (
               pageRows.map((r) => (

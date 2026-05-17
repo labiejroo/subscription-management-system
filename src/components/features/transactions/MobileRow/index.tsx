@@ -1,3 +1,5 @@
+'use client';
+
 import { StatusBadge } from '../../../ui/StatusBadge';
 import { Checkbox } from '../../../ui/Checkbox';
 import { cn, fmtUSD, fmtPaymentMethod } from '../../../../lib/utils';

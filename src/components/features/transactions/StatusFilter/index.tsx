@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
 import { IconChevronD, IconCheck, IconFilter } from '../../../ui/icons';
