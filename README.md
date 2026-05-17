@@ -2,7 +2,7 @@
 
 A subscription transactions dashboard.
 
-Live demo: **[transactions-dashboard.vercel.app](https://transactions-dashboard.vercel.app)** <!-- update after deploy -->
+Live demo: **[subscription-management-system-ruby.vercel.app](https://subscription-management-system-ruby.vercel.app)**
 
 ![Dashboard screenshot](design-reference.png)
 
@@ -47,8 +47,8 @@ Live demo: **[transactions-dashboard.vercel.app](https://transactions-dashboard.
 ### Run locally
 
 ```bash
-git clone https://github.com/your-username/transactions-dashboard
-cd transactions-dashboard
+git clone https://github.com/labiejroo/subscription-management-system
+cd subscription-management-system
 npm install
 npm run dev
 ```
