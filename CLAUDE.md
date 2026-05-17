@@ -34,6 +34,7 @@ This is a recruitment task for a Senior Front-end Engineer position at some comp
 app/
   layout.tsx                        # root layout, Geist font
   page.tsx                          # main page ('use client')
+  loading.tsx                       # Suspense fallback for the page
   globals.css
 
 src/
@@ -53,20 +54,21 @@ src/
         MobileRow/index.tsx
         StatCard/index.tsx
         StatusFilter/index.tsx
+        TableSkeleton/index.tsx
         Toolbar/index.tsx
-  data/
-    transactions.ts                 # seed data (mock)
+  hooks/
+    useTransactions.ts
+    useRetryPayments.ts
+    useDownloadInvoice.ts
   lib/
     types.ts                        # all shared types
     utils.ts                        # cn(), fmtUSD()
     logger.ts                       # observability abstraction
     eng.ts                          # all user-facing copy strings
+    mockData.ts                     # seed data (mock)
+  providers/
+    QueryProvider.tsx
   declarations.d.ts                 # module declarations (*.css)
-
-hooks/
-  useTransactions.ts
-  useRetryPayments.ts
-  useDownloadInvoice.ts
 ```
 
 ---

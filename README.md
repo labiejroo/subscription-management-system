@@ -78,6 +78,7 @@ npm run test:e2e
 app/
   layout.tsx                        # root layout, Geist font
   page.tsx                          # main page ('use client')
+  loading.tsx                       # Suspense fallback for the page
   globals.css
 
 src/
@@ -97,19 +98,20 @@ src/
         MobileRow/index.tsx
         StatCard/index.tsx
         StatusFilter/index.tsx
+        TableSkeleton/index.tsx
         Toolbar/index.tsx
-  data/
-    transactions.ts                 # seed data (mock)
+  hooks/
+    useTransactions.ts
+    useRetryPayments.ts
+    useDownloadInvoice.ts
   lib/
     types.ts                        # shared TypeScript types
     utils.ts                        # cn(), fmtUSD()
     logger.ts                       # observability abstraction
     eng.ts                          # all user-facing copy strings
-
-hooks/
-  useTransactions.ts
-  useRetryPayments.ts
-  useDownloadInvoice.ts
+    mockData.ts                     # seed data (mock)
+  providers/
+    QueryProvider.tsx
 ```
 
 ---
